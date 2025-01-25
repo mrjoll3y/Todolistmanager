@@ -205,7 +205,7 @@
       searchTasksRecursive(keyword, index + 1, foundTasks);
     }
 
-    // Render search results with options to add or delete tasks
+    // Render search results with options to mark as completed or remove tasks
     function renderSearchResults(foundTasks) {
       const taskList = document.getElementById('task-list');
       taskList.innerHTML = '';
@@ -213,24 +213,19 @@
       if (foundTasks.length === 0) {
         taskList.innerHTML = '<li>No tasks found matching your search.</li>';
       } else {
-        foundTasks.forEach(({ text, index }) => {
+        foundTasks.forEach(({ text, index, completed }) => {
           const li = document.createElement('li');
+          li.className = completed ? 'completed' : '';
           li.innerHTML = `
             <span>${text}</span>
             <div>
+              <button class="complete" onclick="toggleComplete(${index})">${completed ? 'Undo' : 'Complete'}</button>
               <button class="remove" onclick="removeTask(${index})">Remove</button>
-              <button class="add" onclick="addTaskFromSearch(${text})">Add Task Again</button>
             </div>
           `;
           taskList.appendChild(li);
         });
       }
-    }
-
-    // Add task from search result
-    function addTaskFromSearch(taskText) {
-      tasks.push({ text: taskText, completed: false });
-      renderTasks();
     }
 
     // Function to trigger search
