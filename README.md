@@ -6,7 +6,7 @@ Writing this software allowed me to explore key JavaScript concepts, such as man
 
 The purpose of this project was to deepen my knowledge of JavaScript and apply it in a real-world context. By building a practical app like this, I gained experience that I can use in future projects and on a daily basis to keep myself organized, and motivated.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/0DDbxUIy1HA)
 
 # Development Environment
 
