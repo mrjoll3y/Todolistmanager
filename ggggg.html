@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JavaScript Demonstrations</title>
+  <title>To-Do List with Features</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
     body {
@@ -20,82 +20,138 @@
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    pre {
-      background: #f4f4f4;
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 5px 0;
       padding: 10px;
+      background: #f4f4f4;
       border-radius: 5px;
-      overflow-x: auto;
+    }
+    .completed {
+      text-decoration: line-through;
+      color: #777;
+    }
+    button {
+      margin: 5px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button.remove {
+      background-color: #ff6b6b;
+      color: white;
+    }
+    button.complete {
+      background-color: #6bc76b;
+      color: white;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>JavaScript Features Demonstration</h1>
-    <h2>Output Display</h2>
-    <button onclick="displayOutput()">Click to Display Output</button>
-    <pre id="output"></pre>
+    <h1>To-Do List with Features</h1>
+    <div>
+      <input id="task-input" type="text" placeholder="Enter a task">
+      <button onclick="addTask()">Add Task</button>
+    </div>
+    <ul id="task-list"></ul>
 
-    <h2>Array ES6 Functions</h2>
-    <button onclick="demonstrateArrayFunctions()">Run Array Functions</button>
+    <h2>Using Native Array Functions</h2>
+    <button onclick="showTaskStats()">Show Task Stats</button>
     <pre id="array-output"></pre>
 
     <h2>Recursion</h2>
-    <button onclick="showRecursionResult()">Calculate Factorial</button>
+    <button onclick="showRecursionExample()">Calculate Sum of Task Lengths</button>
     <pre id="recursion-output"></pre>
 
     <h2>Using an External Library</h2>
-    <button onclick="fetchData()">Fetch Data Using Axios</button>
+    <button onclick="fetchMotivationalQuote()">Get a Motivational Quote</button>
     <pre id="library-output"></pre>
   </div>
 
   <script>
-    // Display output to the screen
-    function displayOutput() {
-      const outputElement = document.getElementById('output');
-      outputElement.textContent = "Hello, this is your output displayed on the screen!";
+    // Task list array
+    let tasks = [];
+
+    // Add a task
+    function addTask() {
+      const input = document.getElementById('task-input');
+      const taskText = input.value.trim();
+      if (taskText) {
+        tasks.push({ text: taskText, completed: false });
+        input.value = '';
+        renderTasks();
+      }
     }
 
-    // Native Array ES6 functions
-    function demonstrateArrayFunctions() {
-      const array = [1, 2, 3, 4, 5];
+    // Render tasks
+    function renderTasks() {
+      const taskList = document.getElementById('task-list');
+      taskList.innerHTML = '';
+      tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.className = task.completed ? 'completed' : '';
+        li.innerHTML = `
+          <span>${task.text}</span>
+          <div>
+            <button class="complete" onclick="toggleComplete(${index})">${task.completed ? 'Undo' : 'Complete'}</button>
+            <button class="remove" onclick="removeTask(${index})">Remove</button>
+          </div>
+        `;
+        taskList.appendChild(li);
+      });
+    }
 
-      // Map: Double each element
-      const doubled = array.map(x => x * 2);
+    // Toggle task completion
+    function toggleComplete(index) {
+      tasks[index].completed = !tasks[index].completed;
+      renderTasks();
+    }
 
-      // Filter: Get only even numbers
-      const evens = array.filter(x => x % 2 === 0);
+    // Remove a task
+    function removeTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
 
-      // Reduce: Sum all elements
-      const sum = array.reduce((total, x) => total + x, 0);
-
-      const output = `Original Array: ${array}
-Doubled: ${doubled}
-Evens: ${evens}
-Sum: ${sum}`;
-
+    // Show task stats using Array functions
+    function showTaskStats() {
+      const completedTasks = tasks.filter(task => task.completed);
+      const taskLengths = tasks.map(task => task.text.length);
+      const totalLength = taskLengths.reduce((sum, length) => sum + length, 0);
+      const output = `
+Total Tasks: ${tasks.length}
+Completed Tasks: ${completedTasks.length}
+Average Task Length: ${tasks.length ? (totalLength / tasks.length).toFixed(2) : 0}`;
       document.getElementById('array-output').textContent = output;
     }
 
-    // Recursion: Calculate factorial
-    function factorial(n) {
-      if (n === 0) return 1;
-      return n * factorial(n - 1);
+    // Recursive sum of task lengths
+    function recursiveSum(lengths, index = 0) {
+      if (index >= lengths.length) return 0;
+      return lengths[index] + recursiveSum(lengths, index + 1);
     }
 
-    function showRecursionResult() {
-      const number = 5; // Example number for factorial
-      const result = factorial(number);
-      document.getElementById('recursion-output').textContent = `Factorial of ${number} is ${result}`;
+    function showRecursionExample() {
+      const taskLengths = tasks.map(task => task.text.length);
+      const totalLength = recursiveSum(taskLengths);
+      document.getElementById('recursion-output').textContent = `Total Length of All Task Texts: ${totalLength}`;
     }
 
-    // Using an external library: Axios for HTTP requests
-    function fetchData() {
+    // Fetch a motivational quote using Axios
+    function fetchMotivationalQuote() {
       const outputElement = document.getElementById('library-output');
-      outputElement.textContent = 'Fetching data...';
-
-      axios.get('https://jsonplaceholder.typicode.com/posts/1')
+      outputElement.textContent = 'Fetching a motivational quote...';
+      axios.get('https://api.quotable.io/random')
         .then(response => {
-          outputElement.textContent = JSON.stringify(response.data, null, 2);
+          outputElement.textContent = `"${response.data.content}" - ${response.data.author}`;
         })
         .catch(error => {
           outputElement.textContent = `Error: ${error.message}`;
