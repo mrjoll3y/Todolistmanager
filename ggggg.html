@@ -131,16 +131,15 @@ Average Task Length: ${tasks.length ? (totalLength / tasks.length).toFixed(2) : 
 
     // Fetch a motivational quote using Axios
     function fetchMotivationalQuote() {
-      const outputElement = document.getElementById('library-output');
-      outputElement.textContent = 'Fetching a motivational quote...';
-      axios.get('https://api.quotable.io/random')
-        .then(response => {
-          outputElement.textContent = `"${response.data.content}" - ${response.data.author}`;
-        })
-        .catch(error => {
-          outputElement.textContent = `Error: ${error.message}`;
-        });
-    }
-  </script>
-</body>
-</html>
+  const outputElement = document.getElementById('library-output');
+  outputElement.textContent = 'Fetching a motivational quote...';
+  fetch('https://type.fit/api/quotes')
+    .then(response => response.json())
+    .then(data => {
+      const randomQuote = data[Math.floor(Math.random() * data.length)];
+      outputElement.textContent = `"${randomQuote.text}" - ${randomQuote.author}`;
+    })
+    .catch(error => {
+      outputElement.textContent = `Error: ${error.message}`;
+    });
+}
