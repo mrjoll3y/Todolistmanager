@@ -29,4 +29,4 @@ Here’s what I could do to improve or add:
 
 - Storage: Use local storage to keep the to-do list even after the page is refreshed.
 - Task Editing: Let users edit existing tasks.
-- 
+- Add an error handling segment for duplicate tasks such as a "are you sure you want to add the task again?" message.
