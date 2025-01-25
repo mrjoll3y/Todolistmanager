@@ -67,10 +67,6 @@
     <button onclick="showTaskStats()">Show Task Stats</button>
     <pre id="array-output"></pre>
 
-    <h2>Recursion</h2>
-    <button onclick="showRecursionExample()">Calculate Sum of Task Lengths</button>
-    <pre id="recursion-output"></pre>
-
     <h2>Using an External Library</h2>
     <button onclick="fetchMotivationalQuote()">Get a Motivational Quote</button>
     <pre id="library-output"></pre>
@@ -98,7 +94,7 @@
       tasks.forEach((task, index) => {
         const li = document.createElement('li');
         li.className = task.completed ? 'completed' : '';
-        li.innerHTML = `
+        li.innerHTML = `  
           <span>${task.text}</span>
           <div>
             <button class="complete" onclick="toggleComplete(${index})">${task.completed ? 'Undo' : 'Complete'}</button>
@@ -131,18 +127,6 @@ Total Tasks: ${tasks.length}
 Completed Tasks: ${completedTasks.length}
 Average Task Length: ${tasks.length ? (totalLength / tasks.length).toFixed(2) : 0}`;
       document.getElementById('array-output').textContent = output;
-    }
-
-    // Recursive sum of task lengths
-    function recursiveSum(lengths, index = 0) {
-      if (index >= lengths.length) return 0;
-      return lengths[index] + recursiveSum(lengths, index + 1);
-    }
-
-    function showRecursionExample() {
-      const taskLengths = tasks.map(task => task.text.length);
-      const totalLength = recursiveSum(taskLengths);
-      document.getElementById('recursion-output').textContent = `Total Length of All Task Texts: ${totalLength}`;
     }
 
     // Fetch a motivational quote using Axios
