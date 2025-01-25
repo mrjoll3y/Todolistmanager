@@ -1,6 +1,6 @@
 # Overview
 
-I created a To-Do list application using JavaScript, HTML, and CSS to demonstrate my understanding of JavaScript. The goal was to create a functional, interactive software that handles tasks such as adding, completing, and removing tasks. I also included features like displaying random motivational quotes and showing basic statistics about the tasks, such as the total number of tasks. I added an error throwing and handling exception to go above and beyond in this assignment.
+I created a To-Do list application using JavaScript, HTML, and CSS to demonstrate my understanding of JavaScript. The goal was to create a functional, interactive software that handles tasks such as adding, completing, and removing tasks. I also included features like displaying random motivational quotes and showing basic statistics about the tasks, such as the total number of tasks. I added an error throwing and handling exception to go above and beyond in this assignment. I used ChatGPT to generate a list of 50 quotes to use in the program and cited ChatGPT in the program itself.
 
 Writing this software allowed me to explore key JavaScript concepts, such as manipulating DOM elements, working with arrays, and handling asynchronous operations. It also helped me improve my skills in managing user interactions on a webpage.
 
