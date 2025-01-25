@@ -164,14 +164,23 @@
 
     // Add a task
     function addTask() {
-      const input = document.getElementById('task-input');
-      const taskText = input.value.trim();
-      if (taskText) {
-        tasks.push({ text: taskText, completed: false });
-        input.value = '';
-        renderTasks();
-      }
+  try {
+    const input = document.getElementById('task-input');
+    const taskText = input.value.trim();
+    
+    if (!taskText) {
+      // Throw an exception if the task is empty
+      throw new Error("Task cannot be empty!");
     }
+    
+    tasks.push({ text: taskText, completed: false });
+    input.value = ''; // Reset input field
+    renderTasks();
+  } catch (error) {
+    // Handle the error by displaying a message
+    alert(`Error: ${error.message}`);
+  }
+}
 
     // Toggle task completion
     function toggleComplete(index) {
