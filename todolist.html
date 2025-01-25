@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>To-Do List and Motivational Quotes</title>
+  <title>To-Do List with Features</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
-      background: linear-gradient(to right, #ff7e5f, #feb47b);
+      background-color: #f9f9f9;
       color: #333;
     }
     .container {
@@ -18,33 +19,6 @@
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      text-align: center;
-      font-size: 36px;
-      color: #ff7e5f;
-    }
-    h2 {
-      color: #333;
-    }
-    input[type="text"] {
-      padding: 10px;
-      width: 80%;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-    }
-    button {
-      padding: 10px;
-      background-color: #ff7e5f;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    button:hover {
-      background-color: #feb47b;
     }
     ul {
       list-style: none;
@@ -63,135 +37,58 @@
       text-decoration: line-through;
       color: #777;
     }
-    .task-stats {
-      background-color: #ff7e5f;
-      color: white;
-      padding: 10px;
-      margin-top: 10px;
+    button {
+      margin: 5px;
+      padding: 5px 10px;
+      border: none;
       border-radius: 5px;
-      font-size: 18px;
-      text-align: center;
+      cursor: pointer;
     }
-    .quote-box {
-      margin-top: 20px;
-      font-size: 18px;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 5px;
-      font-style: italic;
-      text-align: center;
+    button.remove {
+      background-color: #ff6b6b;
+      color: white;
+    }
+    button.complete {
+      background-color: #6bc76b;
+      color: white;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>To-Do List</h1>
+    <h1>To-Do List with Features</h1>
     <div>
       <input id="task-input" type="text" placeholder="Enter a task">
       <button onclick="addTask()">Add Task</button>
     </div>
-    
     <ul id="task-list"></ul>
 
-    <div class="task-stats">
-      <button onclick="showTaskStats()">Show Task Stats</button>
-      <div id="task-stats-output"></div>
-    </div>
+    <h2>Using Native Array Functions</h2>
+    <button onclick="showTaskStats()">Show Task Stats</button>
+    <pre id="array-output"></pre>
 
-    <div class="quote-box">
-      <button onclick="fetchMotivationalQuote()">Get a Motivational Quote</button>
-      <p id="quote-box">Quotes powered by ChatGPT, OpenAI's language model, in 2025.</p>
-    </div>
+    <h2>Recursion</h2>
+    <button onclick="showRecursionExample()">Calculate Sum of Task Lengths</button>
+    <pre id="recursion-output"></pre>
+
+    <h2>Using an External Library</h2>
+    <button onclick="fetchMotivationalQuote()">Get a Motivational Quote</button>
+    <pre id="library-output"></pre>
   </div>
 
   <script>
     // Task list array
     let tasks = [];
 
-    // motivational quotes
-    const motivationalQuotes = [
-  "The best revenge is massive success. - Frank Sinatra",
-  "It’s not whether you get knocked down, it’s whether you get up. - Vince Lombardi",
-  "The way to get started is to quit talking and begin doing. - Walt Disney",
-  "If you want to live a happy life, tie it to a goal, not to people or things. - Albert Einstein",
-  "Life isn’t about finding yourself. Life is about creating yourself. - George Bernard Shaw",
-  "Success is how high you bounce when you hit bottom. - George S. Patton",
-  "Don’t be afraid to give up the good to go for the great. - John D. Rockefeller",
-  "Everything you’ve ever wanted is on the other side of fear. - George Addair",
-  "Success is not in what you have, but who you are. - Bo Bennett",
-  "To live a creative life, we must lose our fear of being wrong. - Joseph Chilton Pearce",
-  "You must be the change you wish to see in the world. - Mahatma Gandhi",
-  "The only way to do great work is to love what you do. - Steve Jobs",
-  "Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill",
-  "It does not matter how slowly you go as long as you do not stop. - Confucius",
-  "What lies behind us and what lies before us are tiny matters compared to what lies within us. - Ralph Waldo Emerson",
-  "You miss 100% of the shots you don’t take. - Wayne Gretzky",
-  "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
-  "The only limit to our realization of tomorrow is our doubts of today. - Franklin D. Roosevelt",
-  "Act as if what you do makes a difference. It does. - William James",
-  "The purpose of life is not to be happy. It is to be useful, to be honorable, to be compassionate, to have it make some difference that you have lived and lived well. - Ralph Waldo Emerson",
-  "Keep your face always toward the sunshine—and shadows will fall behind you. - Walt Whitman",
-  "In three words I can sum up everything I've learned about life: it goes on. - Robert Frost",
-  "The only impossible journey is the one you never begin. - Tony Robbins",
-  "What you get by achieving your goals is not as important as what you become by achieving your goals. - Zig Ziglar",
-  "The only thing standing between you and your goal is the story you keep telling yourself as to why you can't achieve it. - Jordan Belfort",
-  "Believe you can and you're halfway there. - Theodore Roosevelt",
-  "Your time is limited, so don’t waste it living someone else’s life. - Steve Jobs",
-  "You can never cross the ocean until you have the courage to lose sight of the shore. - Christopher Columbus",
-  "Hardships often prepare ordinary people for an extraordinary destiny. - C.S. Lewis",
-  "Success is not how high you have climbed, but how you make a positive difference to the world. - Roy T. Bennett",
-  "I find that the harder I work, the more luck I seem to have. - Thomas Jefferson",
-  "Don’t watch the clock; do what it does. Keep going. - Sam Levenson",
-  "Success is the sum of small efforts, repeated day in and day out. - Robert Collier",
-  "There are no secrets to success. It is the result of preparation, hard work, and learning from failure. - Colin Powell",
-  "The best way to predict the future is to create it. - Peter Drucker",
-  "The harder you work for something, the greater you’ll feel when you achieve it. - Anonymous",
-  "Do not wait to strike till the iron is hot, but make it hot by striking. - William Butler Yeats",
-  "Dream big and dare to fail. - Norman Vaughan",
-  "The only way to achieve the impossible is to believe it is possible. - Charles Kingsleigh",
-  "Success usually comes to those who are too busy to be looking for it. - Henry David Thoreau",
-  "I am not a product of my circumstances. I am a product of my decisions. - Stephen R. Covey",
-  "You can’t go back and change the beginning, but you can start where you are and change the ending. - C.S. Lewis",
-  "Do one thing every day that scares you. - Eleanor Roosevelt",
-  "The only way to make sense out of change is to plunge into it, move with it, and join the dance. - Alan Watts",
-  "To live is the rarest thing in the world. Most people exist, that is all. - Oscar Wilde",
-  "If you’re going through hell, keep going. - Winston Churchill",
-  "A goal without a plan is just a wish. - Antoine de Saint-Exupery",
-  "Life is 10% what happens to us and 90% how we react to it. - Charles R. Swindoll",
-  "Be yourself; everyone else is already taken. - Oscar Wilde",
-  "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment. - Ralph Waldo Emerson"
-];
-
     // Add a task
     function addTask() {
-  try {
-    const input = document.getElementById('task-input');
-    const taskText = input.value.trim();
-    
-    if (!taskText) {
-      // Throw an exception if the task is empty
-      throw new Error("Task cannot be empty!");
-    }
-    
-    tasks.push({ text: taskText, completed: false });
-    input.value = ''; // Reset input field
-    renderTasks();
-  } catch (error) {
-    // Handle the error by displaying a message
-    alert(`Error: ${error.message}`);
-  }
-}
-
-    // Toggle task completion
-    function toggleComplete(index) {
-      tasks[index].completed = !tasks[index].completed;
-      renderTasks();
-    }
-
-    // Remove a task
-    function removeTask(index) {
-      tasks.splice(index, 1);
-      renderTasks();
+      const input = document.getElementById('task-input');
+      const taskText = input.value.trim();
+      if (taskText) {
+        tasks.push({ text: taskText, completed: false });
+        input.value = '';
+        renderTasks();
+      }
     }
 
     // Render tasks
@@ -212,25 +109,53 @@
       });
     }
 
-    // Show task statistics
-    function showTaskStats() {
-      const totalTasks = tasks.length;
-      const completedTasks = tasks.filter(task => task.completed).length;
-      const remainingTasks = totalTasks - completedTasks;
-
-      const stats = `
-        Total Tasks: ${totalTasks} <br>
-        Completed Tasks: ${completedTasks} <br>
-        Remaining Tasks: ${remainingTasks}
-      `;
-      document.getElementById('task-stats-output').innerHTML = stats;
+    // Toggle task completion
+    function toggleComplete(index) {
+      tasks[index].completed = !tasks[index].completed;
+      renderTasks();
     }
 
-    // Get a random motivational quote
+    // Remove a task
+    function removeTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+
+    // Show task stats using Array functions
+    function showTaskStats() {
+      const completedTasks = tasks.filter(task => task.completed);
+      const taskLengths = tasks.map(task => task.text.length);
+      const totalLength = taskLengths.reduce((sum, length) => sum + length, 0);
+      const output = `
+Total Tasks: ${tasks.length}
+Completed Tasks: ${completedTasks.length}
+Total Length of Task Texts: ${totalLength}`;
+      document.getElementById('array-output').textContent = output;
+    }
+
+    // Recursive sum of task lengths
+    function recursiveSum(lengths, index = 0) {
+      if (index >= lengths.length) return 0;
+      return lengths[index] + recursiveSum(lengths, index + 1);
+    }
+
+    function showRecursionExample() {
+      const taskLengths = tasks.map(task => task.text.length);
+      const totalLength = recursiveSum(taskLengths);
+      document.getElementById('recursion-output').textContent = `Total Length of All Task Texts (Recursion): ${totalLength}`;
+    }
+
+    // Fetch a motivational quote using Axios
     function fetchMotivationalQuote() {
-      const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
-      const quote = motivationalQuotes[randomIndex];
-      document.getElementById("quote-box").textContent = quote;
+      const outputElement = document.getElementById('library-output');
+      outputElement.textContent = 'Fetching a motivational quote...';
+      axios.get('https://api.quotable.io/random')
+        .then(response => {
+          outputElement.textContent = `"${response.data.content}" - ${response.data.author}`;
+        })
+        .catch(error => {
+          outputElement.textContent = `Error: ${error.message}`;
+        });
     }
   </script>
 </body>
